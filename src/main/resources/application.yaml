@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: shortener
+  datasource:
+    url: jdbc:mariadb://localhost:3306/demo
+    username: user
+    password: password
+    driver-class-name: org.mariadb.jdbc.Driver
+
+server:
+  port: 8080
+  servlet:
+    context-path: /shortener

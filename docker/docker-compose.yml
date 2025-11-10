@@ -1,0 +1,11 @@
+services:
+  database-local:
+    image: mariadb:latest
+    environment:
+      - TZ=Asia/Bangkok
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=demo
+    ports:
+      - "3306:3306"
