@@ -11,8 +11,6 @@ import lombok.Setter;
 @Entity
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @Column(name = "email")
     private String email;
     @Column(name = "password")

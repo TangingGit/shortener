@@ -7,6 +7,7 @@ import com.example.shortener.model.request.RegisterRequest;
 import com.example.shortener.model.response.authentication.LoginResponse;
 import com.example.shortener.repository.UserRepository;
 import com.example.shortener.repository.entity.UserEntity;
+import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +61,11 @@ public class AuthenticationService {
     public void register(RegisterRequest registerRequest){
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(registerRequest.getEmail());
-        userEntity.setPassword(registerRequest.getPassword());
+
+        String passwordHash = Hashing.sha256()
+                .hashString(registerRequest.getPassword(), StandardCharsets.UTF_8)
+                .toString();
+        userEntity.setPassword(passwordHash);
         userRepository.save(userEntity);
     }
 }
