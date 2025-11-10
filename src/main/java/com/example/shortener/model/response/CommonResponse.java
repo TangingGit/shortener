@@ -15,4 +15,9 @@ public class CommonResponse<T> {
         this.responseMessage = "Success";
         this.data = data;
     }
+    public CommonResponse(){
+        this.responseCode = "200-000";
+        this.responseMessage = "Success";
+        this.data = null;
+    }
 }
