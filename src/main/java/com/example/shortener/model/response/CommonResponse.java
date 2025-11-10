@@ -1,5 +1,6 @@
 package com.example.shortener.model.response;
 
+import com.example.shortener.constant.StatusCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,13 +12,13 @@ public class CommonResponse<T> {
     private T data;
 
     public CommonResponse(T data){
-        this.responseCode = "200-000";
-        this.responseMessage = "Success";
+        this.responseCode = StatusCode.SUCCESS.getCode();
+        this.responseMessage = StatusCode.SUCCESS.getMessage();
         this.data = data;
     }
     public CommonResponse(){
-        this.responseCode = "200-000";
-        this.responseMessage = "Success";
+        this.responseCode = StatusCode.SUCCESS.getCode();
+        this.responseMessage = StatusCode.SUCCESS.getMessage();
         this.data = null;
     }
 }
