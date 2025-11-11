@@ -4,8 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum StatusCode {
-    SUCCESS("200-000","success");
+    SUCCESS("200-000","success"),
 
+    //403
+    USER_OR_PASSWORD_INVALID("403-001","user or password invalid"),
+
+    //500
+    INTERNAL_SERVER_ERROR("500-001","internal server error");
     private final String code;
     private final String message;
 

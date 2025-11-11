@@ -16,8 +16,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public CommonResponse<LoginResponse> login(){
-        return new CommonResponse<>(authenticationService.login());
+    public CommonResponse<LoginResponse> login(
+            @RequestBody RegisterRequest loginRequest
+    ){
+        return new CommonResponse<>(authenticationService.login(loginRequest));
     }
 
     @PostMapping("/register")

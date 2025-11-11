@@ -21,4 +21,10 @@ public class CommonResponse<T> {
         this.responseMessage = StatusCode.SUCCESS.getMessage();
         this.data = null;
     }
+
+    public CommonResponse(StatusCode statusCode){
+        this.responseCode = statusCode.getCode();
+        this.responseMessage = statusCode.getMessage();
+        this.data = null;
+    }
 }
