@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface ShortenUrlRepository extends JpaRepository<ShortenUrlEntity, String> {
+public interface ShortenUrlRepository extends JpaRepository<ShortenUrlEntity, Long> {
     @Query(value = "SELECT NEXTVAL(base62_counter_seq);", nativeQuery = true)
     Long getNextSequenceValue();
 

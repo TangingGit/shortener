@@ -31,4 +31,13 @@ public class ShortenController {
     ){
         return new CommonResponse<>(shortenService.getAllUrls(token));
     }
+
+    @DeleteMapping("/urls/{id}")
+    public CommonResponse<Void> deleteUrl(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Long id
+    ){
+        shortenService.deleteUrl(token, id);
+        return new CommonResponse<>();
+    }
 }

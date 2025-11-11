@@ -78,4 +78,9 @@ public class ShortenService {
         authenticationService.validateToken(token.split("Bearer ")[1]);
         return shortenUrlRepository.findAll();
     }
+
+    public void deleteUrl(String token, Long id){
+        authenticationService.validateToken(token.split("Bearer ")[1]);
+        shortenUrlRepository.deleteById(id);
+    }
 }
