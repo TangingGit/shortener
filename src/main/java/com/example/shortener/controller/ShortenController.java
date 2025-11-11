@@ -4,6 +4,7 @@ import com.example.shortener.model.request.ShortenRequest;
 import com.example.shortener.model.response.CommonResponse;
 import com.example.shortener.model.response.shorten.ShortenResponse;
 import com.example.shortener.service.ShortenService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ public class ShortenController {
     }
     @PostMapping("/shorten")
     public CommonResponse<ShortenResponse> shorten(
-            @RequestBody ShortenRequest shortenRequest
+            @RequestBody @Validated ShortenRequest shortenRequest
     ){
 
         return new CommonResponse<>(shortenService.shortenUrl(shortenRequest));
