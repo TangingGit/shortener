@@ -15,13 +15,11 @@ public class ShortenService {
     ShortenService(ShortenUrlRepository shortenUrlRepository){
         this.shortenUrlRepository = shortenUrlRepository;
     }
-    private static long counter = 1;
 
     public ShortenResponse shortenUrl(ShortenRequest shortenRequest){
-
+        Long counter = shortenUrlRepository.getNextSequenceValue();
         String shortenUrl = convertToBase62(counter);
         saveShortenUrl(shortenUrl, shortenRequest.getOriginalUrl());
-        counter++;
         return buildShortenResponse(shortenUrl, shortenRequest.getOriginalUrl());
     }
 
