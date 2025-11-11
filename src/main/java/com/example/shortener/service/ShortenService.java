@@ -20,6 +20,14 @@ public class ShortenService {
     }
 
     public ShortenResponse shortenUrl(ShortenRequest shortenRequest){
+
+        ShortenUrlEntity shortenUrlEntity = shortenUrlRepository.findByOriginalUrl(shortenRequest.getOriginalUrl());
+
+        if(shortenUrlEntity != null){
+            return buildShortenResponse(shortenUrlEntity.getShortUrl(), shortenUrlEntity.getOriginalUrl());
+        }
+
+
         Long counter = shortenUrlRepository.getNextSequenceValue();
         String shortenUrl = shortenBaseUrl + convertToBase62(counter);
         saveShortenUrl(shortenUrl, shortenRequest.getOriginalUrl());

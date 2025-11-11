@@ -12,9 +12,10 @@ import lombok.Setter;
 @Table(name = "shorten_url")
 @Entity
 public class ShortenUrlEntity {
-    @Id
+
     @Column(name = "short_url")
     private String shortUrl;
+    @Id
     @Column(name = "original_url")
     private String originalUrl;
 }
