@@ -55,4 +55,13 @@ public class ShortenService {
         }
         return encodedString.reverse().toString();
     }
+
+    public String getRedirectUrl(String shortenUrl){
+        ShortenUrlEntity shortenUrlEntity = shortenUrlRepository.findByShortUrl(shortenBaseUrl + shortenUrl);
+        if(shortenUrlEntity != null){
+            return shortenUrlEntity.getOriginalUrl();
+        } else {
+            throw new RuntimeException("URL not found");
+        }
+    }
 }

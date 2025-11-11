@@ -12,4 +12,5 @@ public interface ShortenUrlRepository extends JpaRepository<ShortenUrlEntity, St
     Long getNextSequenceValue();
 
     ShortenUrlEntity findByOriginalUrl(String originalUrl);
+    ShortenUrlEntity findByShortUrl(String shortUrl);
 }
