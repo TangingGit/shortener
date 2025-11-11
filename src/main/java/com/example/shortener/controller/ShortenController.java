@@ -1,6 +1,7 @@
 package com.example.shortener.controller;
 
 import com.example.shortener.model.request.ShortenRequest;
+import com.example.shortener.model.response.CommonResponse;
 import com.example.shortener.model.response.shorten.ShortenResponse;
 import com.example.shortener.service.ShortenService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,10 +17,10 @@ public class ShortenController {
         this.shortenService = shortenService;
     }
     @PostMapping("/shorten")
-    public ShortenResponse shorten(
+    public CommonResponse<ShortenResponse> shorten(
             @RequestBody ShortenRequest shortenRequest
     ){
 
-        return shortenService.shortenUrl(shortenRequest);
+        return new CommonResponse<>(shortenService.shortenUrl(shortenRequest));
     }
 }
