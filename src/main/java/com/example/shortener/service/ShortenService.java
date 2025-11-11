@@ -7,6 +7,8 @@ import com.example.shortener.repository.entity.ShortenUrlEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ShortenService {
     private static final String allowedString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -14,9 +16,16 @@ public class ShortenService {
     private final int base = allowedCharacters.length;
     private final ShortenUrlRepository shortenUrlRepository;
     private final String shortenBaseUrl;
-    ShortenService(ShortenUrlRepository shortenUrlRepository, @Value("${app.shorten.base-url}") String shortenBaseUrl){
+    private final AuthenticationService authenticationService;
+    ShortenService(
+            ShortenUrlRepository shortenUrlRepository,
+            @Value("${app.shorten.base-url}") String shortenBaseUrl,
+            AuthenticationService authenticationService
+    ){
         this.shortenUrlRepository = shortenUrlRepository;
         this.shortenBaseUrl = shortenBaseUrl;
+        this.authenticationService = authenticationService;
+
     }
 
     public ShortenResponse shortenUrl(ShortenRequest shortenRequest){
@@ -63,5 +72,10 @@ public class ShortenService {
         } else {
             throw new RuntimeException("URL not found");
         }
+    }
+
+    public List<ShortenUrlEntity> getAllUrls(String token){
+        authenticationService.validateToken(token.split("Bearer ")[1]);
+        return shortenUrlRepository.findAll();
     }
 }

@@ -18,6 +18,13 @@ public class GlobalExceptionHandler {
                 .body(new CommonResponse(ex.getStatusCode()));
     }
 
+    @ExceptionHandler(JwtInvalidException.class)
+    public ResponseEntity handleJwtInvalidException(JwtInvalidException ex){
+        log.error("JwtInvalidException error: ", ex);
+        return ResponseEntity
+                .status(403)
+                .body(new CommonResponse(ex.getStatusCode()));
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleException(Exception ex){

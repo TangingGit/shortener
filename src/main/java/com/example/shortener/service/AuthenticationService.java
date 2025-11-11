@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.example.shortener.exception.IdentifyException;
+import com.example.shortener.exception.JwtInvalidException;
 import com.example.shortener.model.request.RegisterRequest;
 import com.example.shortener.model.response.authentication.LoginResponse;
 import com.example.shortener.repository.UserRepository;
@@ -32,11 +33,11 @@ public class AuthenticationService {
     private final String rsaPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxYzMQ6QyTaAoIVyaYTdSBhOGoYjsMO8oQLhhK6cZbQ58CTvhdNQGyH7Lo8HFCF2f1q9NqZybZcGWwSt1DxqdX5IxVa7U5xA8iFjKEK09o5jRisQV6ZJnHvDts8qJ6tZK1Xmv0NLQ8nb1CYaTE2CjO99B/lygyIWRd6sGiZB+Dkb8kDGYcfU0lqIt0jDkoBIVLN2CSswurPRRHeSWR7qjU61kVBuihXz7L9BEI61TrR0mmg6i6cGXFwoQA9qzMgo2hQmzRm8WpptoAYsEAglqdy2cFqfD3DwYyCnZFjc6w4a7nNagBxqKsoV2f8y7ox8oNXVpZlzMxVPXRSoeLZBQSQIDAQAB";
     public LoginResponse login(RegisterRequest loginRequest){
         identifyUser(loginRequest.getEmail(), loginRequest.getPassword());
-        return buildLoginResponse(getToken());
+        return buildLoginResponse(getToken(loginRequest.getEmail()));
 
     }
 
-    private String getToken(){
+    private String getToken(String email){
         try {
             PKCS8EncodedKeySpec keySpecPrivate = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(rsaPrivateKey));
             X509EncodedKeySpec keySpecPublic = new X509EncodedKeySpec(Base64.getDecoder().decode(rsaPublicKey));
@@ -46,8 +47,8 @@ public class AuthenticationService {
             Algorithm algorithm = Algorithm.RSA256(publicKey, privateKey);
 
             return JWT.create()
-                    .withIssuer("auth0")
                     .withExpiresAt(new java.util.Date(System.currentTimeMillis() + 3600 * 1000))
+                    .withClaim("email", email)
                     .sign(algorithm);
         } catch (JWTCreationException | NoSuchAlgorithmException | InvalidKeySpecException e){
             log.error("e: ", e);
@@ -82,5 +83,23 @@ public class AuthenticationService {
                 .toString();
         userEntity.setPassword(passwordHash);
         userRepository.save(userEntity);
+    }
+
+    public void validateToken(String token){
+        try {
+            PKCS8EncodedKeySpec keySpecPrivate = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(rsaPrivateKey));
+            X509EncodedKeySpec keySpecPublic = new X509EncodedKeySpec(Base64.getDecoder().decode(rsaPublicKey));
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpecPrivate);
+            RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(keySpecPublic);
+            Algorithm algorithm = Algorithm.RSA256(publicKey, privateKey);
+
+            JWT.require(algorithm)
+                    .build()
+                    .verify(token);
+        } catch (Exception e){
+            log.error("e: ", e);
+            throw new JwtInvalidException();
+        }
     }
 }
