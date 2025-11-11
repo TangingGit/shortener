@@ -12,3 +12,6 @@ server:
   port: 8080
   servlet:
     context-path: /shortener
+app:
+  shorten:
+    base-url: http://localhost:8080/shortener/r/

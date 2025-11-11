@@ -4,6 +4,7 @@ import com.example.shortener.model.request.ShortenRequest;
 import com.example.shortener.model.response.shorten.ShortenResponse;
 import com.example.shortener.repository.ShortenUrlRepository;
 import com.example.shortener.repository.entity.ShortenUrlEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,13 +13,15 @@ public class ShortenService {
     private final char[] allowedCharacters = allowedString.toCharArray();
     private final int base = allowedCharacters.length;
     private final ShortenUrlRepository shortenUrlRepository;
-    ShortenService(ShortenUrlRepository shortenUrlRepository){
+    private final String shortenBaseUrl;
+    ShortenService(ShortenUrlRepository shortenUrlRepository, @Value("${app.shorten.base-url}") String shortenBaseUrl){
         this.shortenUrlRepository = shortenUrlRepository;
+        this.shortenBaseUrl = shortenBaseUrl;
     }
 
     public ShortenResponse shortenUrl(ShortenRequest shortenRequest){
         Long counter = shortenUrlRepository.getNextSequenceValue();
-        String shortenUrl = convertToBase62(counter);
+        String shortenUrl = shortenBaseUrl + convertToBase62(counter);
         saveShortenUrl(shortenUrl, shortenRequest.getOriginalUrl());
         return buildShortenResponse(shortenUrl, shortenRequest.getOriginalUrl());
     }
