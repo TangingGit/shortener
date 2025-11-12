@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.example.shortener.exception.IdentifyException;
 import com.example.shortener.exception.JwtInvalidException;
+import com.example.shortener.exception.UserExistException;
 import com.example.shortener.model.request.RegisterRequest;
 import com.example.shortener.model.response.authentication.LoginResponse;
 import com.example.shortener.repository.UserRepository;
@@ -21,6 +22,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -75,6 +77,10 @@ public class AuthenticationService {
     }
 
     public void register(RegisterRequest registerRequest){
+        Optional<UserEntity> userEntityResult = userRepository.findById(registerRequest.getEmail());
+        if (userEntityResult.isPresent()){
+            throw new UserExistException();
+        }
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(registerRequest.getEmail());
 

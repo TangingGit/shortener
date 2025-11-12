@@ -33,4 +33,13 @@ public class GlobalExceptionHandler {
                 .status(500)
                 .body(new CommonResponse(StatusCode.INTERNAL_SERVER_ERROR));
     }
+
+    @ExceptionHandler(UserExistException.class)
+    public ResponseEntity handleUserExistException(UserExistException ex){
+        log.error("JwtInvalidException error: ", ex);
+        return ResponseEntity
+                .status(400)
+                .body(new CommonResponse(ex.getStatusCode()));
+    }
+
 }

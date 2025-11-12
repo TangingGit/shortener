@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum StatusCode {
     SUCCESS("200-000","success"),
-
+    //400
+    USER_EXIST("400-001","user is exist"),
     //403
     USER_OR_PASSWORD_INVALID("403-001","user or password invalid"),
     JWT_INVALID("403-002","jwt invalid"),
