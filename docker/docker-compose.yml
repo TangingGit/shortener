@@ -1,0 +1,13 @@
+services:
+  database-local:
+    image: mariadb:latest
+    environment:
+      - TZ=Asia/Bangkok
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=demo
+    volumes:
+      - ./db_init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
