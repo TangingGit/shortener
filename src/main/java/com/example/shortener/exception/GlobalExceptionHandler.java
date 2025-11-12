@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(JwtInvalidException.class)
     public ResponseEntity handleJwtInvalidException(JwtInvalidException ex){
-        log.error("JwtInvalidException error: ", ex);
+        log.error("handleJwtInvalidException error: ", ex);
         return ResponseEntity
                 .status(403)
                 .body(new CommonResponse(ex.getStatusCode()));
@@ -36,10 +36,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserExistException.class)
     public ResponseEntity handleUserExistException(UserExistException ex){
-        log.error("JwtInvalidException error: ", ex);
+        log.error("handleUserExistException error: ", ex);
         return ResponseEntity
                 .status(400)
                 .body(new CommonResponse(ex.getStatusCode()));
     }
+
+    @ExceptionHandler(PageNotFoundException.class)
+    public ResponseEntity handlePageNotFoundException(PageNotFoundException ex){
+        log.error("handlePageNotFoundException error: ", ex);
+        return ResponseEntity
+                .status(404)
+                .body(new CommonResponse(ex.getStatusCode()));
+    }
+
+
 
 }

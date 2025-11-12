@@ -1,5 +1,6 @@
 package com.example.shortener.service;
 
+import com.example.shortener.exception.PageNotFoundException;
 import com.example.shortener.model.request.ShortenRequest;
 import com.example.shortener.model.response.shorten.ShortenResponse;
 import com.example.shortener.repository.ShortenUrlRepository;
@@ -70,7 +71,7 @@ public class ShortenService {
         if(shortenUrlEntity != null){
             return shortenUrlEntity.getOriginalUrl();
         } else {
-            throw new RuntimeException("URL not found");
+            throw new PageNotFoundException();
         }
     }
 
