@@ -37,7 +37,7 @@ public class AuthenticationService {
 
     }
 
-    private String getToken(String email){
+    public String getToken(String email){
         try {
             PKCS8EncodedKeySpec keySpecPrivate = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(rsaPrivateKey));
             X509EncodedKeySpec keySpecPublic = new X509EncodedKeySpec(Base64.getDecoder().decode(rsaPublicKey));
