@@ -142,6 +142,24 @@ class ShortenControllerTest {
                     .andExpect(jsonPath("$.data.original_url").value("https://www.google.com"))
                     .andExpect(jsonPath("$.data.short_url").value("http://localhost:8080/shortener/r/exist"));
         }
+
+        @Test
+        void should_throw_invalid_format_when_send_original_url_invalid_format() throws Exception {
+            String requestBody = """
+                {
+                    "original_url":"https://www.googlecom"
+                }
+            """;
+            mockMvc.perform(post("/api/shorten")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody)
+                    )
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.response_code").value("400-002"))
+                    .andExpect(jsonPath("$.response_message").value("invalid format"))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+        }
     }
 
     @Nested
