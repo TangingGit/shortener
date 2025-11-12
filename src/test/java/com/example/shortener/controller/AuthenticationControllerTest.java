@@ -80,4 +80,52 @@ class AuthenticationControllerTest {
 
         }
     }
+
+    @Nested
+    class Login {
+        @Test
+        void should_login_success() throws Exception {
+            String requestBody = """
+                {
+                    "email": "test@hotmail.com",
+                    "password": "1234"
+                }
+            """;
+            Mockito.when(userRepository.findByEmailAndPassword(any(), any())).thenReturn(new UserEntity(){{
+                setPassword("hashed_password");
+                setEmail("test@hotmail.com");
+            }});
+            mockMvc.perform(
+                            post("/api/login")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(requestBody)
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.response_code").value("200-000"))
+                    .andExpect(jsonPath("$.response_message").value("success"))
+                    .andExpect(jsonPath("$.data.token").exists());
+        }
+
+        @Test
+        void should_cannot_login_when_email_or_password_incorrect() throws Exception {
+            String requestBody = """
+                {
+                    "email": "test@hotmail.com",
+                    "password": "1234"
+                }
+            """;
+            Mockito.when(userRepository.findByEmailAndPassword(any(), any())).thenReturn(null);
+            mockMvc.perform(
+                            post("/api/login")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(requestBody)
+                    )
+                    .andExpect(status().isForbidden())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.response_code").value("403-001"))
+                    .andExpect(jsonPath("$.response_message").value("user or password invalid"))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+        }
+    }
 }
