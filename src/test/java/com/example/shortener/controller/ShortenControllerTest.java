@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -83,6 +85,62 @@ class ShortenControllerTest {
                     .andExpect(jsonPath("$.response_code").value("403-002"))
                     .andExpect(jsonPath("$.response_message").value("jwt invalid"))
                     .andExpect(jsonPath("$.data").doesNotExist());
+        }
+    }
+
+    @Nested
+    class Shorten {
+        List<ShortenUrlEntity> shortenUrlEntityList = List.of(
+                new ShortenUrlEntity(){{
+                    setId(1L);
+                    setOriginalUrl("https://www.google.com");
+                    setShortUrl("http://localhost:8080/shortener/r/b");
+                }}
+        );
+        @Test
+        void should_collect_shorten_url_success() throws Exception {
+            String requestBody = """
+                {
+                    "original_url":"https://www.google.com"
+                }
+            """;
+            Mockito.when(shortenUrlRepository.findByOriginalUrl("https://www.google.com")).thenReturn(null);
+            Mockito.when(shortenUrlRepository.getNextSequenceValue()).thenReturn(1L);
+            Mockito.when(shortenUrlRepository.save(any())).thenReturn(new ShortenUrlEntity());
+            mockMvc.perform(post("/api/shorten")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody)
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.response_code").value("200-000"))
+                    .andExpect(jsonPath("$.response_message").value("success"))
+                    .andExpect(jsonPath("$.data.original_url").value("https://www.google.com"))
+                    .andExpect(jsonPath("$.data.short_url").value("http://localhost:8080/shortener/r/b"));
+        }
+
+        @Test
+        void should_return_success_when_original_url_exist() throws Exception {
+            String requestBody = """
+                {
+                    "original_url":"https://www.google.com"
+                }
+            """;
+            Mockito.when(shortenUrlRepository.findByOriginalUrl("https://www.google.com")).thenReturn(new ShortenUrlEntity(){{
+                setId(1L);
+                setOriginalUrl("https://www.google.com");
+                setShortUrl("http://localhost:8080/shortener/r/exist");
+            }});
+            mockMvc.perform(post("/api/shorten")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody)
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.response_code").value("200-000"))
+                    .andExpect(jsonPath("$.response_message").value("success"))
+                    .andExpect(jsonPath("$.data.original_url").value("https://www.google.com"))
+                    .andExpect(jsonPath("$.data.short_url").value("http://localhost:8080/shortener/r/exist"));
         }
     }
 
