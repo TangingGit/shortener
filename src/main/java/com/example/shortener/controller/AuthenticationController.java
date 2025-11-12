@@ -17,14 +17,14 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public CommonResponse<LoginResponse> login(
-            @RequestBody RegisterRequest loginRequest
+            @RequestBody @Validated RegisterRequest loginRequest
     ){
         return new CommonResponse<>(authenticationService.login(loginRequest));
     }
 
     @PostMapping("/register")
     public CommonResponse<LoginResponse> register(
-            @RequestBody RegisterRequest registerRequest
+            @RequestBody @Validated RegisterRequest registerRequest
     ){
         authenticationService.register(registerRequest);
         return new CommonResponse<>();

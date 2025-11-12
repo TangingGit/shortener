@@ -33,7 +33,7 @@ class AuthenticationControllerTest {
         void should_register_success() throws Exception {
             String requestBody = """
                 {
-                    "email": "tang@hotmail.com",
+                    "email": "test@hotmail.com",
                     "password": "1234"
                 }
             """;
@@ -62,7 +62,7 @@ class AuthenticationControllerTest {
                 }
             """;
             Mockito.when(userRepository.findById("tang@hotmail.com")).thenReturn(Optional.of(new UserEntity(){{
-                setEmail("tang@hotmail.com");
+                setEmail("test@hotmail.com");
                 setPassword("hashed_password");
             }}));
             Mockito.when(userRepository.save(any())).thenReturn(new UserEntity());
@@ -75,6 +75,33 @@ class AuthenticationControllerTest {
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.response_code").value("400-001"))
                     .andExpect(jsonPath("$.response_message").value("user is exist"))
+                    .andExpect(jsonPath("$.data").doesNotExist())
+            ;
+
+        }
+
+        @Test
+        void should_invalid_request_when_email_invalid_format() throws Exception {
+            String requestBody = """
+                {
+                    "email": "testhotmail.com",
+                    "password": "1234"
+                }
+            """;
+            Mockito.when(userRepository.findById("tang@hotmail.com")).thenReturn(Optional.of(new UserEntity(){{
+                setEmail("tang@hotmail.com");
+                setPassword("hashed_password");
+            }}));
+            Mockito.when(userRepository.save(any())).thenReturn(new UserEntity());
+            mockMvc.perform(
+                            post("/api/register")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(requestBody)
+                    )
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.response_code").value("400-002"))
+                    .andExpect(jsonPath("$.response_message").value("invalid format"))
                     .andExpect(jsonPath("$.data").doesNotExist())
             ;
 
@@ -125,6 +152,27 @@ class AuthenticationControllerTest {
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.response_code").value("403-001"))
                     .andExpect(jsonPath("$.response_message").value("user or password invalid"))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+        }
+
+        @Test
+        void should_invalid_request_when_email_invalid_format() throws Exception {
+            String requestBody = """
+                {
+                    "email": "testhotmail.com",
+                    "password": "1234"
+                }
+            """;
+            Mockito.when(userRepository.findByEmailAndPassword(any(), any())).thenReturn(null);
+            mockMvc.perform(
+                            post("/api/login")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(requestBody)
+                    )
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.response_code").value("400-002"))
+                    .andExpect(jsonPath("$.response_message").value("invalid format"))
                     .andExpect(jsonPath("$.data").doesNotExist());
         }
     }

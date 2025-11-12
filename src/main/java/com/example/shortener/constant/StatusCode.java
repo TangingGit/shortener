@@ -7,6 +7,7 @@ public enum StatusCode {
     SUCCESS("200-000","success"),
     //400
     USER_EXIST("400-001","user is exist"),
+    INVALID_FORMAT("400-002","invalid format"),
     //404
     PAGE_NOT_FOUND("404-001","page not found"),
     //403
