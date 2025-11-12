@@ -21,6 +21,8 @@ public class RedirectController {
             @PathVariable String shortenUrl
     ){
         String url = shortenService.getRedirectUrl(shortenUrl);
-        return new RedirectView(url);
+        RedirectView redirectView  = new RedirectView(url);
+        redirectView.setContextRelative(false);
+        return redirectView;
     }
 }
