@@ -18,8 +18,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -51,7 +51,7 @@ class ShortenControllerTest {
             Mockito.when(shortenUrlRepository.findAll()).thenReturn(shortenUrlEntityList);
             mockMvc.perform(get("/api/urls")
                             .header("Authorization","Bearer " + token)
-                            .accept(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.response_code").value("200-000"))
@@ -66,7 +66,7 @@ class ShortenControllerTest {
 
             mockMvc.perform(get("/api/urls")
                             .header("Authorization","Bearer " + "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjI4ODAzMjEsImVtYWlsIjoidGFuZ0Bob3RtYWlsLmNvbSJ9.mvm8gMoZul9PZOW0jnPpC4xF5hDvUdr3GJl1Tjn6nHNSxxpAQ64Fqj6YavlB-QAL4Mdas3JzET5h-GeNCPnq1_9BWBng4i3CUaKphzdMhH1grtgJhr6PTSX7Jr5D_uK53dsP-xBXBotPDeifSv2gmGI3F8De9ihzvHS1t0E4lIh0lxQvPaymdjw1aV0ZCcVUwo0hr_gzi5mserbh87ahkkmSR5zvJaxmfs-aZs7sOhpCaxRtF-y2cqlPulSnf-Q26wkXi1qCw63iV7bJj22evHYQorZHNUEoC-24J6jDwiCeXwawuvEq7MXYYTBfl4Kwyezzwn7GyP45qQRfZ54-Aw")
-                            .accept(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isForbidden())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.response_code").value("403-002"))
@@ -79,7 +79,7 @@ class ShortenControllerTest {
 
             mockMvc.perform(get("/api/urls")
                             .header("Authorization","Bearer " + "invalid.token")
-                            .accept(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isForbidden())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.response_code").value("403-002"))
@@ -144,4 +144,20 @@ class ShortenControllerTest {
         }
     }
 
+    @Nested
+    class DeleteUrl {
+        @Test
+        void should_delete_url_shorten_success() throws Exception {
+            Mockito.doNothing().when(shortenUrlRepository).deleteById(1L);
+            String token = authenticationService.getToken("test@gmail.com");
+            mockMvc.perform(delete("/api/urls/{id}",1L)
+                            .header("Authorization","Bearer " + token)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.response_code").value("200-000"))
+                    .andExpect(jsonPath("$.response_message").value("success"))
+                    .andExpect(jsonPath("$.data").doesNotExist());
+        }
+    }
 }
