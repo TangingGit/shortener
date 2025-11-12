@@ -1,0 +1,198 @@
+{
+	"info": {
+		"_postman_id": "079e0148-18a9-4d20-aa4e-f9d4a8a8d433",
+		"name": "shortener",
+		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49951519",
+		"_collection_link": "https://rattanon-siangsiri-2448767.postman.co/workspace/Rattanon-Siangsiri's-Workspace~335fca9d-37c1-4662-8890-edd39e8cc1e8/collection/49951519-079e0148-18a9-4d20-aa4e-f9d4a8a8d433?action=share&source=collection_link&creator=49951519"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"tang@hotmail.com\",\n    \"password\": \"1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/shortener/api/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shortener",
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"tang@hotmail.com\",\n    \"password\": \"1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/shortener/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shortener",
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Shorten Url",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"original_url\":\"https://google.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/shortener/api/shorten",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shortener",
+						"api",
+						"shorten"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Redirect",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"tang@hotmail.com\",\n    \"password\": \"1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/shortener/r/b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shortener",
+						"r",
+						"b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All urls",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjI5MTYxMTcsImVtYWlsIjoidGFuZ0Bob3RtYWlsLmNvbSJ9.hu72M-EQibYuz29KxqdTW1DNrB03wqp5LYkzPtwQ9MboEGqsh1D8sYiu6-cUVSZg6gI0rYZpj6ZWpDqx5K8zPZZ4hod6314vF1rTE0lcJKGpYxVjobrU1-oGq_6yMzxIg0wifwobVcJ7TKLz7CQLz51MC_VX97HLXlpvGTLCIgTrRd6ow1B1TK8q_sydGSR17pg82f8QoiYj23RhVzTXqziBHiM-NAR5YSBKj0gjYgsBDnwq-IEAP6355mlRoPO7HMrXv2-WkS5QGYpmTp2mgpIVDkxBrhxWWzmULXtOzQJHLepr_3ZgZSwYTGeAX5e-HwwrdwEOlUNJPaIIJ5chkA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/shortener/api/urls",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shortener",
+						"api",
+						"urls"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete url",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjI5NDY4NzcsImVtYWlsIjoidGFuZ0Bob3RtYWlsLmNvbSJ9.dsgMMq__pbn1mX7-U6WJzm8Iju1lVX6Ki5MHE-EN7SWAaJKbcO-LM7kKDS5OzLBc9JGmX0DfjkJF7bZyUya4Atxe3qtWNpVR7MHWG56NduI8_l4ktEuc4EoYv5xQaHd3UlLp8fMyfrivdtMK0i4b14JNgsjxxYoLQ-pZZMyK0W38BiWbfJ49Od9DWkqIcOS3qN7IDTIVdfXcRbhoiOQMI2P3zQi1FRG6tG-eDxAoWygtDz1_wZBtqclmDyapXDlXI70xnKn6BiWpHJAzILAVh1ENV2JthXvo5A6Bc8KXeFvty1vha2gxgKRjFigp46_qXB5G9mPy8IN1trSGxonXcg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/shortener/api/urls/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"shortener",
+						"api",
+						"urls",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
